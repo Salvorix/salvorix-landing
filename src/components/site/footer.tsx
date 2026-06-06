@@ -101,7 +101,35 @@ export function Footer() {
 				</div>
 
 				<div className='flex md:flex-row flex-col md:justify-between md:items-center gap-3 mt-14 pt-6 border-ink-800 border-t text-ink-500 text-xs'>
-					<p>© 2026 PT Salvorix Teknologi Indonesia</p>
+					<div>
+						<p>© 2026 PT Salvorix Teknologi Indonesia</p>
+						<div className='flex flex-wrap items-center gap-x-2 gap-y-1 pt-1'>
+							<Link
+								href='https://heulaulab.xyz'
+								target='_blank'
+								rel='noopener noreferrer'
+							>
+								<div className='flex items-center gap-x-2'>
+									<Image
+										src='/assets/heulaulab.svg'
+										alt='HeulauLab'
+										width={100}
+										height={100}
+										className='dark:invert w-auto h-10'
+									/>
+									<span
+										className='text-muted-foreground/40 select-none'
+										aria-hidden
+									>
+										|
+									</span>
+									<span className='text-[11px] text-muted-foreground/90'>
+										Proudly partnered with heulaulab
+									</span>
+								</div>
+							</Link>
+						</div>
+					</div>
 					<p className='ticker'>build 1.0.0 · main · last sync 12s ago</p>
 				</div>
 			</div>
