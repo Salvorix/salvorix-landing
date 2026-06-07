@@ -7,16 +7,18 @@ type StaticPageProps = {
   eyebrow: string;
   title: string;
   description: string;
-  body: string;
   comingSoon?: boolean;
-};
+} & (
+  | { comingSoon: true; body?: string }
+  | { comingSoon?: false; body: string }
+);
 
 export function StaticPage({
   eyebrow,
   title,
   description,
-  body,
   comingSoon = false,
+  body,
 }: StaticPageProps) {
   return (
     <>

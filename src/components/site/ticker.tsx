@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 
 type SpotResult = { symbol: string; price: number }[];
 
@@ -10,6 +10,7 @@ type Quote = {
   px: string;
   delta?: string;
   up?: boolean;
+  unit?: string;
   live: boolean;
 };
 
@@ -29,11 +30,11 @@ const LIVE_SYMBOLS = [
 ];
 
 const STATIC_QUOTES: Quote[] = [
-  { code: "NI", name: "Nickel", px: "17,815.00", delta: "", live: false },
-  { code: "CO", name: "Cobalt", px: "23,440.00", delta: "", live: false },
-  { code: "SN", name: "Tin", px: "31,205.00", delta: "", live: false },
-  { code: "AL", name: "Alumina", px: "412.00", delta: "", live: false },
-  { code: "FE", name: "Iron Ore 62%", px: "117.85", delta: "", live: false },
+  { code: "NI", name: "Nickel", px: "17,815.00", live: false },
+  { code: "CO", name: "Cobalt", px: "23,440.00", live: false },
+  { code: "SN", name: "Tin", px: "31,205.00", live: false },
+  { code: "AL", name: "Alumina", px: "412.00", live: false },
+  { code: "FE", name: "Iron Ore 62%", px: "117.85", live: false },
 ];
 
 const FALLBACKS: Record<string, { px: string }> = {
@@ -44,12 +45,10 @@ const FALLBACKS: Record<string, { px: string }> = {
 
 const METALS_API = "https://metals.live/api/spot";
 
-// Module-level cache so server components / re-renders don't refetch
 let cachedSpot: SpotResult | null = null;
 
 function formatPrice(price: number, code: string): string {
   if (code === "CU") {
-    // metals.live returns per troy oz, convert to per tonne
     const perTonne = price * 32150.7;
     return perTonne.toLocaleString("en-US", {
       minimumFractionDigits: 0,
@@ -62,24 +61,41 @@ function formatPrice(price: number, code: string): string {
   });
 }
 
+const initialQuotes: Quote[] = [
+  ...LIVE_SYMBOLS.map((s) => ({
+    code: s.code,
+    name: s.name,
+    px: "--",
+    unit: s.unit,
+    live: true,
+  })),
+  ...STATIC_QUOTES,
+];
+
 export function Ticker() {
-  const [quotes, setQuotes] = useState<Quote[]>([
-    ...LIVE_SYMBOLS.map((s) => ({
-      code: s.code,
-      name: s.name,
-      px: "--",
-      unit: s.unit,
-      live: true,
-    })),
-    ...STATIC_QUOTES.map((s) => ({ ...s, delta: s.delta || undefined, up: true })),
-  ]);
-  const [loading, setLoading] = useState(true);
+  const [quotes, setQuotes] = useState<Quote[]>(initialQuotes);
 
   useEffect(() => {
     let cancelled = false;
 
-    const fetch = async () => {
-      if (cachedSpot && !cancelled) {
+    const applySpot = (data: SpotResult) => {
+      setQuotes((prev) =>
+        prev.map((q) => {
+          if (!q.live) return q;
+          const target = LIVE_SYMBOLS.find((s) => s.code === q.code);
+          if (!target) return q;
+          const match = data.find((d) => d.symbol === target.symbol);
+          if (match) {
+            return { ...q, px: formatPrice(match.price, q.code) };
+          }
+          const fb = FALLBACKS[q.code];
+          return fb ? { ...q, px: fb.px } : q;
+        })
+      );
+    };
+
+    const loadSpot = async () => {
+      if (cachedSpot) {
         applySpot(cachedSpot);
         return;
       }
@@ -87,39 +103,16 @@ export function Ticker() {
       try {
         const res = await fetch(METALS_API);
         const data: SpotResult = await res.json();
-        if (!cancelled) {
-          cachedSpot = data;
-          applySpot(data);
-        }
+        if (cancelled) return;
+        cachedSpot = data;
+        applySpot(data);
       } catch {
-        // Fall back to last-known estimates — do not show error UI
-        if (!cancelled) {
-          applySpot([]);
-        }
-      } finally {
-        if (!cancelled) setLoading(false);
+        if (cancelled) return;
+        applySpot([]);
       }
     };
 
-    const applySpot = (data: SpotResult) => {
-      setQuotes((prev) =>
-        prev.map((q) => {
-          if (!q.live) return q;
-          const match = data.find((d) => d.symbol === LIVE_SYMBOLS.find((s) => s.code === q.code)?.symbol);
-          if (match) {
-            return {
-              ...q,
-              px: formatPrice(match.price, q.code),
-            };
-          }
-          // No live data — show estimate from fallback
-          const fb = FALLBACKS[q.code];
-          return fb ? { ...q, px: fb.px } : q;
-        })
-      );
-    };
-
-    fetch();
+    loadSpot();
 
     return () => {
       cancelled = true;
