@@ -46,13 +46,13 @@ export function Nav() {
 
 				<div className='flex items-center gap-2'>
 					<Link
-						href='https://salvorixapp.heulaulab.xyz/sign-in'
+						href='https://salvorix-app.heulaulab.xyz/sign-in'
 						className='hidden sm:inline-block px-3 py-2 rounded-md text-ink-700 hover:text-ink-900 dark:hover:text-ink-50 dark:text-ink-200 text-sm transition-colors'
 					>
 						Sign in
 					</Link>
 					<Link
-						href='https://salvorixapp.heulaulab.xyz/sign-up'
+						href='https://salvorix-app.heulaulab.xyz/sign-up'
 						className='bg-ink-900 dark:bg-ink-50 px-3.5 py-2 rounded-md font-medium text-ink-50 dark:text-ink-900 text-sm transition-all hover:-translate-y-px active:translate-y-0'
 					>
 						Book a site visit

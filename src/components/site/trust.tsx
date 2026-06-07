@@ -1,14 +1,25 @@
-type Operator = { name: string; mark: "circle" | "square" | "diamond" | "ring"; region: string };
+type Archetype = {
+  label: string;
+  detail: string;
+  tier: string;
+};
 
-const OPERATORS: Operator[] = [
-  { name: "Taniwel Gold", mark: "ring", region: "Maluku" },
-  { name: "Bantaeng Nickel", mark: "square", region: "Sulsel" },
-  { name: "Halmahera Cobalt", mark: "diamond", region: "Malut" },
-  { name: "Morowali Alloy", mark: "circle", region: "Sulteng" },
-  { name: "Bumi Resources", mark: "ring", region: "Kaltim" },
-  { name: "Citra Palu", mark: "square", region: "Sulteng" },
-  { name: "Anugrah Tambang", mark: "diamond", region: "Kalsel" },
-  { name: "Sultra Mineral", mark: "circle", region: "Sultra" },
+const ARCHETYPES: Archetype[] = [
+  {
+    label: "Single-pit IUP",
+    detail: "Under 5,000 t/month · Nickel laterite · Sulawesi",
+    tier: "Pit plan",
+  },
+  {
+    label: "Multi-pit contractor",
+    detail: "10,000–30,000 t/month · Coal · Kalimantan",
+    tier: "Bench plan",
+  },
+  {
+    label: "Mid-tier producer",
+    detail: "30,000+ t/month · Gold · Maluku",
+    tier: "Mill plan",
+  },
 ];
 
 export function Trust() {
@@ -21,53 +32,42 @@ export function Trust() {
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <div>
             <h2 className="text-[clamp(1.6rem,3vw,2.4rem)] font-semibold leading-[1.1] tracking-[-0.015em] text-ink-900 dark:text-ink-50">
-              In production at eight sites.
+              Built for operators
               <br />
-              In pilot at twelve more.
+              across the archipelago.
             </h2>
           </div>
           <p className="max-w-[44ch] text-[15px] leading-[1.55] text-ink-600 dark:text-ink-300">
-            We work with operators from three-pit IUP holders to mid-tier
-            producers moving 30,000 t a month. Names shown with permission.
+            From single-pit IUP holders to mid-tier producers moving 30,000 t a
+            month. Active deployments across Kalimantan, Sulawesi, Maluku, and
+            Sumatera.
           </p>
         </div>
 
         <ul
-          aria-label="Operators using Salvorix"
-          className="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-ink-200 bg-ink-200/60 dark:border-ink-700 dark:bg-ink-800/60 sm:grid-cols-4"
+          aria-label="Operator archetypes using Salvorix"
+          className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3"
         >
-          {OPERATORS.map((o) => (
+          {ARCHETYPES.map((a) => (
             <li
-              key={o.name}
-              className="flex items-center gap-3 bg-ink-50 px-5 py-6 dark:bg-ink-950"
+              key={a.label}
+              className="flex flex-col gap-4 rounded-lg border border-ink-200 bg-white/60 px-6 py-7 dark:border-ink-700 dark:bg-ink-900/60"
             >
-              <Mark shape={o.mark} />
-              <div>
-                <p className="text-[14px] font-medium text-ink-900 dark:text-ink-50">
-                  {o.name}
-                </p>
-                <p className="stamped text-ink-400">{o.region}</p>
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-[17px] font-semibold leading-[1.3] tracking-[-0.01em] text-ink-900 dark:text-ink-50">
+                  {a.label}
+                </h3>
+                <span className="shrink-0 rounded-full border border-ink-300 px-2.5 py-0.5 text-[11px] font-medium tracking-wide text-ink-700 dark:border-ink-700 dark:text-ink-200">
+                  {a.tier}
+                </span>
               </div>
+              <p className="text-[14px] leading-[1.55] text-ink-600 dark:text-ink-300">
+                {a.detail}
+              </p>
             </li>
           ))}
         </ul>
       </div>
     </section>
   );
-}
-
-function Mark({ shape }: { shape: Operator["mark"] }) {
-  const common =
-    "h-6 w-6 border border-ink-700 dark:border-ink-200";
-  if (shape === "ring") return <span aria-hidden="true" className={`${common} rounded-full`} />;
-  if (shape === "square") return <span aria-hidden="true" className={`${common} rounded-[2px]`} />;
-  if (shape === "diamond") {
-    return (
-      <span
-        aria-hidden="true"
-        className={`${common} rotate-45 rounded-[1px]`}
-      />
-    );
-  }
-  return <span aria-hidden="true" className={`${common} rounded-full bg-ink-700 dark:bg-ink-200`} />;
 }

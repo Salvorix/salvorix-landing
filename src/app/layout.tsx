@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://salvorix.id"),
+  metadataBase: new URL("https://salvorix-app.heulaulab.xyz"),
   title: {
     default: "Salvorix — Mining compliance ERP for Indonesian operators",
     template: "%s · Salvorix",

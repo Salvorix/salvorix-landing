@@ -17,14 +17,14 @@ const COLS = [
 			{ label: 'Pit plan', href: '/pit-plan' },
 			{ label: 'On-prem', href: '/on-prem' },
 			{ label: 'Security', href: '/security' },
-			{ label: 'Status', href: 'https://statusalvorix.heulaulab.xyz' },
+			{ label: 'Status', href: 'https://salvorix-status.heulaulab.xyz' },
 		],
 	},
 	{
 		title: 'Company',
 		links: [
 			{ label: 'About', href: '/about' },
-			{ label: 'Contact', href: 'mailto:ops@salvorix.id' },
+			{ label: 'Contact', href: 'mailto:ops@salvorix-app.heulaulab.xyz' },
 			{ label: 'Privacy', href: '/privacy' },
 			{ label: 'Terms', href: '/terms' },
 		],
@@ -54,26 +54,6 @@ export function Footer() {
 							Mining compliance ERP for Indonesian operators. Built in Jakarta,
 							tested in the pit.
 						</p>
-						<dl className='gap-4 grid grid-cols-2 mt-8 text-sm'>
-							<div>
-								<dt className='text-ink-500 stamped'>NIB</dt>
-								<dd className='mt-1 text-ink-200 ticker'>9120012345678</dd>
-							</div>
-							<div>
-								<dt className='text-ink-500 stamped'>NPWP</dt>
-								<dd className='mt-1 text-ink-200 ticker'>
-									01.234.567.8-019.000
-								</dd>
-							</div>
-							<div className='col-span-2'>
-								<dt className='text-ink-500 stamped'>Address</dt>
-								<dd className='mt-1 text-ink-200'>
-									Wisma 46, Lantai 18
-									<br />
-									Jl. Jenderal Sudirman Kav. 1, Jakarta 10220
-								</dd>
-							</div>
-						</dl>
 					</div>
 
 					<nav
@@ -102,7 +82,7 @@ export function Footer() {
 
 				<div className='flex md:flex-row flex-col md:justify-between md:items-center gap-3 mt-14 pt-6 border-ink-800 border-t text-ink-500 text-xs'>
 					<div>
-						<p>© 2026 PT Salvorix Teknologi Indonesia</p>
+						<p>© {new Date().getFullYear()} Salvorix</p>
 						<div className='flex flex-wrap items-center gap-x-2 gap-y-1 pt-1'>
 							<Link
 								href='https://heulaulab.xyz'
